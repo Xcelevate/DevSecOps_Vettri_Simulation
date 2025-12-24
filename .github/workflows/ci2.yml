@@ -1,20 +1,15 @@
-name: Check GitHub Secret
+name: Print GitHub Variable
 
 on:
-  workflow_dispatch:   # manual trigger
+  workflow_dispatch:
   push:
     branches: ["main"]
 
 jobs:
-  check-secret:
+  print-variable:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check if SECRET_KEY is set
+      - name: Print variable value
         run: |
-          if [ -z "${{ vars.SQL_USER }}" ]; then
-            echo "❌ SECRET_KEY is NOT set"
-            exit 1
-          else
-            echo "✅ SECRET_KEY is set"
-          fi
+          echo "APP_ENV = ${{ vars.SQL_USER }}"
