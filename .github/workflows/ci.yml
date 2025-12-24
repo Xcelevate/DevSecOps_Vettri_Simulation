@@ -1,13 +1,20 @@
-name: Use Secrets
-on: [workflow_dispatch]
- 
+name: Check GitHub Secret
+
+on:
+  workflow_dispatch:   # manual trigger
+  push:
+    branches: ["main"]
+
 jobs:
-  build:
+  check-secret:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Use secret
+      - name: Check if SECRET_KEY is set
         run: |
-          echo "Username is ${{ secrets.DB_USER }}"
-          echo "Password length is ${#DB_PASSWORD}"
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          if [ -z "${{ secrets.DB_User }}" ]; then
+            echo "❌ SECRET_KEY is NOT set"
+            exit 1
+          else
+            echo "✅ SECRET_KEY is set"
+          fi
