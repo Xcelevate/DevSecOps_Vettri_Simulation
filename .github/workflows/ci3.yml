@@ -1,0 +1,43 @@
+name: CI Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-secret:
+    name: Check Secret
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify DB_User secret
+        run: |
+          if [ -z "${{ secrets.DB_User }}" ]; then
+            echo "❌ DB_User secret is NOT set"
+            exit 1
+          else
+            echo "✅ DB_User secret is set"
+          fi
+
+  print-variable:
+    name: Print Variable
+    runs-on: ubuntu-latest
+    needs: check-secret   # 👈 dependency
+
+    steps:
+      - name: Print SQL_USER variable
+        run: |
+          echo "SQL_USER = ${{ vars.SQL_USER }}"
+
+  build:
+    name: Build Job
+    runs-on: ubuntu-latest
+    needs: print-variable   # 👈 dependency
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Simulate build
+        run: |
+          echo "🏗️ Build started..."
+          echo "Build successful ✅"
