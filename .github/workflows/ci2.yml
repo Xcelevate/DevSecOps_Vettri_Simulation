@@ -1,0 +1,20 @@
+name: Check GitHub Secret
+
+on:
+  workflow_dispatch:   # manual trigger
+  push:
+    branches: ["main"]
+
+jobs:
+  check-secret:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if SECRET_KEY is set
+        run: |
+          if [ -z "${{ vars.SQL_USER }}" ]; then
+            echo "❌ SECRET_KEY is NOT set"
+            exit 1
+          else
+            echo "✅ SECRET_KEY is set"
+          fi
